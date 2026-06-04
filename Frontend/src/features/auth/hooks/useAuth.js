@@ -1,66 +1,86 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../auth.context";
-import { login, register, logout, getMe } from "../services/auth.api";
+import { login, register, logout } from "../services/auth.api";
 
 
 
 export const useAuth = () => {
 
     const context = useContext(AuthContext)
-    const { user, setUser, loading, setLoading } = context
+
+    if (!context) {
+        throw new Error("useAuth must be used within AuthProvider")
+    }
+
+    const {
+        user,
+        setUser,
+        loading,
+        authActionLoading,
+        setAuthActionLoading,
+        authError,
+        setAuthError
+    } = context
 
 
     const handleLogin = async ({ email, password }) => {
-        setLoading(true)
+        setAuthActionLoading(true)
+        setAuthError("")
+
         try {
             const data = await login({ email, password })
             setUser(data.user)
+            return true
         } catch (err) {
-
+            setUser(null)
+            setAuthError(err.message)
+            return false
         } finally {
-            setLoading(false)
+            setAuthActionLoading(false)
         }
     }
 
     const handleRegister = async ({ username, email, password }) => {
-        setLoading(true)
+        setAuthActionLoading(true)
+        setAuthError("")
+
         try {
             const data = await register({ username, email, password })
             setUser(data.user)
+            return true
         } catch (err) {
-
+            setUser(null)
+            setAuthError(err.message)
+            return false
         } finally {
-            setLoading(false)
+            setAuthActionLoading(false)
         }
     }
 
     const handleLogout = async () => {
-        setLoading(true)
-        try {
-            const data = await logout()
-            setUser(null)
-        } catch (err) {
+        setAuthActionLoading(true)
+        setAuthError("")
 
+        try {
+            await logout()
+            setUser(null)
+            return true
+        } catch (err) {
+            setAuthError(err.message)
+            return false
         } finally {
-            setLoading(false)
+            setAuthActionLoading(false)
         }
     }
 
-    useEffect(() => {
-
-        const getAndSetUser = async () => {
-            try {
-
-                const data = await getMe()
-                setUser(data.user)
-            } catch (err) { } finally {
-                setLoading(false)
-            }
-        }
-
-        getAndSetUser()
-
-    }, [])
-
-    return { user, loading, handleRegister, handleLogin, handleLogout }
+    return {
+        user,
+        loading,
+        authActionLoading,
+        authError,
+        setAuthError,
+        handleRegister,
+        handleLogin,
+        handleLogout
+    }
 }

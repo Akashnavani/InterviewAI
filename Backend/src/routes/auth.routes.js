@@ -10,6 +10,7 @@ const authRouter = Router()
  * @access Public
  */
 authRouter.post("/register", authController.registerUserController)
+authRouter.post("/signup", authController.registerUserController)
 
 
 /**
@@ -21,10 +22,11 @@ authRouter.post("/login", authController.loginUserController)
 
 
 /**
- * @route GET /api/auth/logout
+ * @route POST /api/auth/logout
  * @description clear token from user cookie and add the token in blacklist
  * @access public
  */
+authRouter.post("/logout", authController.logoutUserController)
 authRouter.get("/logout", authController.logoutUserController)
 
 
@@ -34,6 +36,7 @@ authRouter.get("/logout", authController.logoutUserController)
  * @access private
  */
 authRouter.get("/get-me", authMiddleware.authUser, authController.getMeController)
+authRouter.get("/check", authMiddleware.authUser, authController.getMeController)
 
 
 module.exports = authRouter
