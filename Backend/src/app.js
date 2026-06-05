@@ -20,6 +20,13 @@ const interviewRouter = require("./routes/interview.routes")
 app.use("/api/auth", authRouter)
 app.use("/api/interview", interviewRouter)
 
+// Serve frontend static files in production
+const path = require("path")
+app.use(express.static(path.join(__dirname, "../../Frontend/dist")))
 
+// Catch-all route to serve index.html for React Router
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../../Frontend/dist/index.html"))
+})
 
 module.exports = app

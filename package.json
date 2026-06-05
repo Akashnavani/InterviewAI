@@ -1,0 +1,9 @@
+{
+  "name": "interview-ai-root",
+  "version": "1.0.0",
+  "description": "Root package.json for Render deployment",
+  "scripts": {
+    "build": "npm install --prefix Frontend && npm run build --prefix Frontend && npm install --prefix Backend",
+    "start": "npm start --prefix Backend"
+  }
+}
