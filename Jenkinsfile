@@ -6,6 +6,7 @@ pipeline {
         DOCKER_IMAGE = "akashnavani/interview-ai-backend"
         DOCKER_TAG = "${env.BUILD_ID}"
         SONAR_PROJECT_KEY = "interview-ai-yt"
+        DOCKER_HOST = "tcp://localhost:2375"
     }
 
     stages {
