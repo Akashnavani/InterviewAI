@@ -29,7 +29,7 @@ pipeline {
         stage('3. Dependency Scan (Trivy FS)') {
             steps {
                 // Scan the local file system for dependencies/vulnerabilities
-                bat 'trivy fs --format table -o trivy-fs-report.txt .'
+                bat 'C:\\trivy\\trivy.exe fs --format table -o trivy-fs-report.txt .'
                 archiveArtifacts artifacts: 'trivy-fs-report.txt', allowEmptyArchive: true
             }
         }
