@@ -36,9 +36,7 @@ pipeline {
 
         stage('4. Build Docker Image') {
             steps {
-                script {
-                    appImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}", "-f Dockerfile .")
-                }
+                bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile ."
             }
         }
 
@@ -52,11 +50,11 @@ pipeline {
 
         stage('5. Push Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
-                        appImage.push()
-                        appImage.push("latest")
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    bat "echo %DOCKER_PASS% | docker login --username %DOCKER_USER% --password-stdin"
+                    bat "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    bat "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
+                    bat "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }

@@ -36,9 +36,7 @@ pipeline {
 
         stage('4. Build Docker Image') {
             steps {
-                script {
-                    appImage = docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}", "-f Dockerfile .")
-                }
+                bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -f Dockerfile ."
             }
         }
 
