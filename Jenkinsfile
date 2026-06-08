@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Replace 'yourdockerhubusername' with your actual username
-        DOCKER_IMAGE = "akashnavani/interview-ai-backend"
+        
+        DOCKER_IMAGE = "akashnavani/interview-ai"
         DOCKER_TAG = "${env.BUILD_ID}"
         SONAR_PROJECT_KEY = "interview-ai-yt"
         DOCKER_HOST = "tcp://localhost:2375"
